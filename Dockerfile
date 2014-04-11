@@ -51,7 +51,6 @@ ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose ports.
 EXPOSE 22
-ADD supervisor/supervisord.conf /etc/supervisord.conf
 
 
 #################################################################################
@@ -68,7 +67,7 @@ RUN rm /etc/nginx/nginx.conf
 ADD ./nginx.conf /etc/nginx/nginx.conf
 
 # Attach volumes.
-VOLUME /var/log/nginx
+# VOLUME /var/log/nginx
 
 # Expose ports.
 EXPOSE 80
@@ -76,7 +75,7 @@ EXPOSE 80
 
 #######################################  Mysql  ########################################
 
-RUN apt-get install -y mysql-server mysql mysql-devel mysql-client
+RUN apt-get install -y mysql-server mysql-client
 
 ADD my.cnf /etc/mysql/conf.d/my.cnf
 RUN chmod 664 /etc/mysql/conf.d/my.cnf
