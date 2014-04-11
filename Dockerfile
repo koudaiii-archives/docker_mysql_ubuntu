@@ -1,4 +1,4 @@
-# Nginx Dockerfile
+# MySQL-Nginx-SSH Dockerfile
 #
 # VERSION       1
 
