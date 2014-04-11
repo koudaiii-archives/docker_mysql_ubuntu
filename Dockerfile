@@ -45,8 +45,7 @@ RUN ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # setup Supervisor
 RUN apt-get install -y supervisor
-RUN mkdir -p /var/run/sshd
-RUN mkdir -p /var/log/supervisor
+RUN mkdir -p /var/run/sshd; mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose ports.
@@ -77,15 +76,16 @@ EXPOSE 80
 
 RUN apt-get install -y mysql-server mysql-client
 
-ADD my.cnf /etc/mysql/conf.d/my.cnf
-RUN chmod 664 /etc/mysql/conf.d/my.cnf
+RUN rm -f /etc/mysql/my.cnf
+ADD my.cnf /etc/mysql/my.cnf
+RUN chmod 664 /etc/mysql/my.cnf
 
 #Mysql run
 ADD run /usr/local/bin/run
 RUN chmod +x /usr/local/bin/run
 
-#Mount Volume host 
-VOLUME ["/var/lib/mysql"]
+#Mount Volume host
+#VOLUME ["/var/lib/mysql"]
 
 CMD ["/usr/local/bin/run"]
 

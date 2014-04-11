@@ -1,38 +1,17 @@
 #!/bin/bash
-set -e
 
+#Run mysql user
 chown -R mysql:mysql /var/lib/mysql
+
+#Install
 mysql_install_db --user mysql > /dev/null
 
-MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-"koudaiii"}
-MYSQL_DATABASE=${MYSQL_DATABASE:-"koudaiii_production"}
-MYSQL_USER=${MYSQL_USER:-"koudaiii"}
-MYSQL_PASSWORD=${MYSQL_PASSWORD:-"koudaiii"}
-MYSQLD_ARGS=${MYSQLD_ARGS:-""}
+#Setup MYSQL
+MYSQL_COMMAND="mysql -uroot mysql -e"
 
-tfile=`mktemp`
-if [[ ! -f "$tfile" ]]; then
-    return 1
-fi
+$MYSQL_COMMAND "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;"
+$MYSQL_COMMAND "CREATE DATABASE your_database ;"
+$MYSQL_COMMAND "FLUSH PRIVILEGES;"
 
-cat << EOF > $tfile
-USE mysql;
-FLUSH PRIVILEGES;
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION;
-UPDATE user SET password=PASSWORD("$MYSQL_ROOT_PASSWORD") WHERE user='root';
-FLUSH PRIVILEGES;
-EOF
-
-if [[ $MYSQL_DATABASE != "" ]]; then
-    echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` CHARACTER SET utf8 COLLATE utf8_general_ci;" >> $tfile
-    echo "FLUSH PRIVILEGES;;" >> $tfile
-    if [[ $MYSQL_USER != "" ]]; then
-        echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* to '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $tfile
-        echo "FLUSH PRIVILEGES;;" >> $tfile
-    fi
-fi
-
-#/usr/sbin/mysqld --bootstrap --verbose=0 $MYSQLD_ARGS < $tfile
-#rm -f $tfile
-
-#exec /usr/sbin/mysqld $MYSQLD_ARGS
+#Start mysqld 
+cd /usr ; /usr/bin/mysqld_safe &
