@@ -13,12 +13,17 @@ In Host Machine
 
     $ git clone https://github.com/koudaiii/docker_mysql_ubuntu.git
 
+### SSH-Key
+
+    $ cp ~/.ssh/id_rsa.pub authorized_keys
+
+
 Change username to your own
 
     $ vim ~/docker_mysql_ubuntu/nginx.conf
 
 Change app to your app
-   
+
     $ vim ~/docker_mysql_ubuntu/default
 
 Change dockerfile to your Document_ROOT
@@ -27,7 +32,7 @@ Change dockerfile to your Document_ROOT
 
 Docker run
 
-    $ docker build -t user/mysql . 
+    $ docker build -t user/mysql .
 
 #### Attach persistent/shared directories
 
