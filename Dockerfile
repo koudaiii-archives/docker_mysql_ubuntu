@@ -82,12 +82,15 @@ RUN chmod 664 /etc/mysql/my.cnf
 
 #Mysql run
 ADD run /usr/local/bin/run
-RUN chmod +x /usr/local/bin/run
+ADD setup_mysql.sh /root/setup_mysql.sh
+RUN chmod +x /usr/local/bin/run; chmod +x /root/setup_mysql.sh
 
 #Mount Volume host
 #VOLUME ["/var/lib/mysql"]
 
 CMD ["/usr/local/bin/run"]
+
+RUN /bin/sh /root/setup_mysql.sh
 
 # expose for mysqld
 EXPOSE 3306

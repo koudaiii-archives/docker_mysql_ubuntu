@@ -1,17 +1,4 @@
 #!/bin/bash
 
-#Run mysql user
-chown -R mysql:mysql /var/lib/mysql
-
-#Install
-mysql_install_db --user mysql > /dev/null
-
-#Setup MYSQL
-MYSQL_COMMAND="mysql -uroot mysql -e"
-
-$MYSQL_COMMAND "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  WITH GRANT OPTION;"
-$MYSQL_COMMAND "CREATE DATABASE your_database ;"
-$MYSQL_COMMAND "FLUSH PRIVILEGES;"
-
 #Start mysqld 
 cd /usr ; /usr/bin/mysqld_safe &
